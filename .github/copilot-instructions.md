@@ -46,10 +46,30 @@
 	Prompt user for debug mode, launch only if confirmed.
 	 -->
 
+- [ ] Integrate Additional Libraries (if requested)
+	<!--
+	If user requests adding a library with gateware components:
+	1. Add library to platformio.ini lib_deps
+	2. Review docs/LIBRARY_INTEGRATION.md for standard Wishbone address map
+	3. Assign next available Wishbone slave address (0x00-0x0F: RGB LED, 0x10-0x1F: HDMI, 0x20+: available)
+	4. Update src/gateware/top.v:
+	   - Add Wishbone slave signals (sN_wb_*)
+	   - Connect to address decoder
+	   - Instantiate peripheral module
+	   - Add top-level I/O ports
+	5. Update src/gateware/papilio_arcade_template.gprj with required gateware source files
+	6. Update src/gateware/pins.cst with pin constraints (check IO_TYPE requirements)
+	7. Update firmware sketch to use the library API
+	8. Build and test incrementally (firmware first, then gateware)
+	9. Refer to library's INTEGRATION.md file if available
+	10. Compare with working reference implementations when troubleshooting
+	-->
+
 - [ ] Ensure Documentation is Complete
 	<!--
 	Verify that all previous steps have been completed.
 	Verify that README.md and the copilot-instructions.md file in the .github directory exists and contains current project information.
+	Ensure docs/LIBRARY_INTEGRATION.md exists and is up to date.
 	Clean up the copilot-instructions.md file in the .github directory by removing all HTML comments.
 	 -->
 
@@ -91,6 +111,17 @@ PROJECT CONTENT RULES:
 - Ensure all generated components serve a clear purpose within the user's requested workflow.
 - If a feature is assumed but not confirmed, prompt the user for clarification before including it.
 - If you are working on a VS Code extension, use the VS Code API tool with a query to find relevant VS Code API references and samples related to that query.
+
+LIBRARY INTEGRATION RULES (for PlatformIO + FPGA projects):
+- Always consult docs/LIBRARY_INTEGRATION.md before integrating libraries with gateware components.
+- Check if library has an INTEGRATION.md file with specific instructions.
+- Maintain Wishbone address map: assign next available slave address (check existing allocations).
+- For gateware integration: update top.v, .gprj file, and pins.cst in that order.
+- Use persistent instances (allocated with new) for library controllers in firmware.
+- Verify IO_TYPE and bank voltage compatibility when adding pin constraints.
+- Test firmware integration first before adding gateware to isolate issues.
+- When troubleshooting, compare with working reference implementations.
+- For HDMI specifically: ensure DVI_TX_Top IP core is included, use LVCMOS18D for differential pairs.
 
 TASK COMPLETION RULES:
 - Your task is complete when:

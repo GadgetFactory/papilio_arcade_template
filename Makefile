@@ -27,7 +27,6 @@ upload: firmware
 	"$(PIO)" run --target upload
 
 monitor:
-	# change COM port or baud as needed
 	"$(PIO)" device monitor --port COM4 --baud 115200
 
 clean:

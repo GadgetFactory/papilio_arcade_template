@@ -15,8 +15,39 @@
         <File path="..\..\.pio\libdeps\esp32-s3-devkitc-1\papilio_rgb_led\gateware\wb_rgb_led_ctrl.v" type="file.verilog" enable="1"/>
         <File path="pins.cst" type="file.cst" enable="1"/>
         <File path="timing.sdc" type="file.sdc" enable="1"/>
+
+        <!-- papilio_hdmi gateware sources -->
+        <File path="..\..\.pio\libdeps\esp32-s3-devkitc-1\papilio_hdmi\gateware\src\color_bar_generator.v" type="file.verilog" enable="1"/>
+        <File path="..\..\.pio\libdeps\esp32-s3-devkitc-1\papilio_hdmi\gateware\src\gowin_rpll.v" type="file.verilog" enable="1"/>
+        <File path="..\..\.pio\libdeps\esp32-s3-devkitc-1\papilio_hdmi\gateware\src\hdmi_timing.v" type="file.verilog" enable="1"/>
+        <File path="..\..\.pio\libdeps\esp32-s3-devkitc-1\papilio_hdmi\gateware\src\testpattern.v" type="file.verilog" enable="1"/>
+        <File path="..\..\.pio\libdeps\esp32-s3-devkitc-1\papilio_hdmi\gateware\src\tmds_encoder.v" type="file.verilog" enable="1"/>
+        <File path="..\..\.pio\libdeps\esp32-s3-devkitc-1\papilio_hdmi\gateware\src\TMDS_rPLL.v" type="file.verilog" enable="1"/>
+        <File path="..\..\.pio\libdeps\esp32-s3-devkitc-1\papilio_hdmi\gateware\src\video_top.v" type="file.verilog" enable="1"/>
+        <File path="..\..\.pio\libdeps\esp32-s3-devkitc-1\papilio_hdmi\gateware\src\video_top_wb.v" type="file.verilog" enable="1"/>
+        <File path="..\..\.pio\libdeps\esp32-s3-devkitc-1\papilio_hdmi\gateware\src\wb_hdmi_colorbar.v" type="file.verilog" enable="1"/>
+        <File path="..\..\.pio\libdeps\esp32-s3-devkitc-1\papilio_hdmi\gateware\src\wb_video_ctrl.v" type="file.verilog" enable="1"/>
+        <File path="..\..\.pio\libdeps\esp32-s3-devkitc-1\papilio_hdmi\gateware\src\dvi_tx\dvi_tx.v" type="file.verilog" enable="1"/>
     </FileList>
 </Project>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -3,6 +3,7 @@
 
 #include <SPI.h>
 #include "RGBLed.h"
+#include <HDMIController.h>
 
 // SPI Pin Configuration for ESP32-S3
 // Adjust these pins based on your actual hardware connections
@@ -12,6 +13,7 @@
 #define SPI_CS    10   // CS - connects to FPGA esp_cs_n
 
 SPIClass * fpgaSPI = NULL;
+HDMIController *hdmi = NULL;
 
 void setup() {
   Serial.begin(115200);
@@ -21,63 +23,71 @@ void setup() {
   // Initialize SPI for FPGA communication
   fpgaSPI = new SPIClass(HSPI);
   fpgaSPI->begin(SPI_CLK, SPI_MISO, SPI_MOSI, SPI_CS);
-  
-  
+
   // Configure CS pin
   pinMode(SPI_CS, OUTPUT);
   digitalWrite(SPI_CS, HIGH);  // CS idle high
   // Initialize RGB LED library (it will initialize the Wishbone SPI helper)
   RGBLed::begin(fpgaSPI, SPI_CS);
-  
-  // Initialize Serial2 for UART debug from FPGA (on MISO pin)
-  Serial2.begin(115200, SERIAL_8N1, SPI_MISO, -1);  // RX on MISO pin, no TX
-  
+
+  // Initialize HDMI controller (make it persistent so it remains active)
+  hdmi = new HDMIController(fpgaSPI, SPI_CS, SPI_CLK, SPI_MOSI, SPI_MISO);
+  if (hdmi) {
+    hdmi->begin();
+    hdmi->setVideoPattern(1); // Example: set video pattern
+    Serial.println("HDMI: initialized and pattern set to 1");
+  } else {
+    Serial.println("HDMI: failed to allocate controller");
+  }
+
   Serial.println("SPI initialized");
-  Serial.println("UART debug initialized on MISO pin");
   delay(100);
-  
+
   // Set RGB LED to green
   RGBLed::setColor(RGBLed::COLOR_GREEN);
   Serial.println("LED set to GREEN");
 }
 
 void loop() {
-  // Read and forward UART debug data from FPGA
-  // while (Serial2.available()) {
-  //   Serial.write(Serial2.read());
-  // }
-  
-  // Example: Cycle through colors every 2 seconds
+  // Cycle through colors and HDMI patterns every 2 seconds
   delay(2000);
   RGBLed::setColor(RGBLed::COLOR_RED);
-  Serial.println("LED: RED");
+  if (hdmi) hdmi->setVideoPattern(0);
+  Serial.println("LED: RED | HDMI: color bar");
   
   delay(2000);
   RGBLed::setColor(RGBLed::COLOR_BLUE);
-  Serial.println("LED: BLUE");
+  if (hdmi) hdmi->setVideoPattern(1);
+  Serial.println("LED: BLUE | HDMI: net grid");
   
   delay(2000);
   RGBLed::setColor(RGBLed::COLOR_GREEN);
-  Serial.println("LED: GREEN");
+  if (hdmi) hdmi->setVideoPattern(2);
+  Serial.println("LED: GREEN | HDMI: gray");
   
   delay(2000);
   RGBLed::setColor(RGBLed::COLOR_YELLOW);
-  Serial.println("LED: YELLOW");
+  if (hdmi) hdmi->setVideoPattern(3);
+  Serial.println("LED: YELLOW | HDMI: single color");
   
   delay(2000);
   RGBLed::setColor(RGBLed::COLOR_CYAN);
-  Serial.println("LED: CYAN");
+  if (hdmi) hdmi->setVideoPattern(0);
+  Serial.println("LED: CYAN | HDMI: color bar");
   
   delay(2000);
   RGBLed::setColor(RGBLed::COLOR_MAGENTA);
-  Serial.println("LED: MAGENTA");
+  if (hdmi) hdmi->setVideoPattern(1);
+  Serial.println("LED: MAGENTA | HDMI: net grid");
   
   delay(2000);
   RGBLed::setColor(RGBLed::COLOR_PURPLE);
-  Serial.println("LED: PURPLE");
+  if (hdmi) hdmi->setVideoPattern(2);
+  Serial.println("LED: PURPLE | HDMI: gray");
   
   delay(2000);
   RGBLed::setColor(RGBLed::COLOR_ORANGE);
-  Serial.println("LED: ORANGE");
+  if (hdmi) hdmi->setVideoPattern(3);
+  Serial.println("LED: ORANGE | HDMI: single color");
 }
 
