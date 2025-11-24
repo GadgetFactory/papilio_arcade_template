@@ -26,6 +26,9 @@ if {[file exists $gprj]} {
 
 open_project papilio_arcade_template.gprj
 
+# Enable SystemVerilog support for HDMI modules
+set_option -verilog_std sysv2017
+
 # Preferred way to set top module in newer Gowin shells
 if {[catch {set_option -top_module top} err]} {
 	puts "set_option -top_module failed or not available: $err"

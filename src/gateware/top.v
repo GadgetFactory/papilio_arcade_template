@@ -52,7 +52,7 @@ module top (
     wire s1_wb_we;
     wire s1_wb_ack;
 
-    // Wishbone signals - Slave 2 (USB Serial)
+    // Wishbone signals - Slave 2 (Character RAM)
     wire [7:0] s2_wb_adr;
     wire [7:0] s2_wb_dat_o;
     wire [7:0] s2_wb_dat_i;
@@ -60,6 +60,11 @@ module top (
     wire s2_wb_stb;
     wire s2_wb_we;
     wire s2_wb_ack;
+    
+    // Character RAM video interface
+    wire [11:0] video_char_addr;
+    wire [7:0] video_char_data;
+    wire [7:0] video_attr_data;
     
     // SPI to Wishbone bridge with UART debug
     simple_spi_wb_bridge_debug u_spi_wb_bridge (
@@ -139,10 +144,28 @@ module top (
         .wb_stb_i(s1_wb_stb),
         .wb_we_i(s1_wb_we),
         .wb_ack_o(s1_wb_ack),
+        .text_char_addr(video_char_addr),
+        .text_char_data(video_char_data),
         .O_tmds_clk_p(O_tmds_clk_p),
         .O_tmds_clk_n(O_tmds_clk_n),
         .O_tmds_data_p(O_tmds_data_p),
         .O_tmds_data_n(O_tmds_data_n)
+    );
+    
+    // Character RAM controller (Slave 2, addresses 0x20-0x2F)
+    // 80x30 character text mode with 8x8 VGA font
+    wb_char_ram u_wb_char_ram (
+        .clk(clk_27mhz),
+        .rst_n(rst_n),
+        .wb_adr_i(s2_wb_adr),
+        .wb_dat_i(s2_wb_dat_o),
+        .wb_dat_o(s2_wb_dat_i),
+        .wb_cyc_i(s2_wb_cyc),
+        .wb_stb_i(s2_wb_stb),
+        .wb_we_i(s2_wb_we),
+        .wb_ack_o(s2_wb_ack),
+        .video_char_addr(video_char_addr),
+        .video_char_data(video_char_data)
     );
 
 endmodule
